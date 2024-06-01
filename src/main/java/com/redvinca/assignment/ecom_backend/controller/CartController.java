@@ -1,19 +1,31 @@
 package com.redvinca.assignment.ecom_backend.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.redvinca.assignment.ecom_backend.model.Cart;
-import com.redvinca.assignment.ecom_backend.service.CartService;
-
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.redvinca.assignment.ecom_backend.model.Cart;
+import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
+import com.redvinca.assignment.ecom_backend.response.MessageResponse;
+import com.redvinca.assignment.ecom_backend.service.CartService;
+import com.redvinca.assignment.ecom_backend.serviceImpl.CartServiceImpl;
 
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
+
+	@Autowired
+	private CartServiceImpl cartServiceImpl;
 
 	@Autowired
 	private CartService cartService;
@@ -76,5 +88,11 @@ public class CartController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to calculate total quantity");
 		}
+	}
+
+	@PostMapping("/update-Quantity")
+	public ResponseEntity<MessageResponse> updateQuantity(@RequestBody UpdateQuanatityRequest request) {
+		MessageResponse response = cartServiceImpl.updateQuantity(request);
+		return ResponseEntity.ok().body(response);
 	}
 }
