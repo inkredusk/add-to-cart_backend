@@ -21,6 +21,7 @@ public class CartService {
 	@Autowired
 	private ProductRepository productRepository;
 
+
 	public Cart addToCart(Long productId) {
 		Product product  = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product Not Found"));
 		if (product.getStock() <= 0) {
@@ -47,6 +48,7 @@ public class CartService {
 	public Cart updateCartQuantity(Long cartId, int quantity) {
 		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
 		Product product = cart.getProduct();
+
 
 		if (quantity > product.getStock()) {
 			throw new IllegalArgumentException("Quantity exceeds stock");
