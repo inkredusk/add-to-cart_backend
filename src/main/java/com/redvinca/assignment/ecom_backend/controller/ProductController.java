@@ -1,12 +1,10 @@
 package com.redvinca.assignment.ecom_backend.controller;
 
-
+import com.example.shoppingcart.model.Product;
+import com.example.shoppingcart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.redvinca.assignment.ecom_backend.model.Product;
-import com.redvinca.assignment.ecom_backend.service.ProductService;
 
 import java.util.List;
 
