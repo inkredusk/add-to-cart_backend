@@ -23,7 +23,7 @@ public class CartService {
 
     public Cart addToCart(Long productId) {
         Product product  = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product Not Found"));
-        if (product.getStock() <= 0) {
+        if (product == null || product.getStock() <= 0) {
             throw new IllegalArgumentException("Product is out of stock");
         }
 
@@ -43,7 +43,7 @@ public class CartService {
             return cartRepository.save(cart);
         }
     }
-
+    
     public Cart updateCartQuantity(Long cartId, int quantity) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
         Product product = cart.getProduct();

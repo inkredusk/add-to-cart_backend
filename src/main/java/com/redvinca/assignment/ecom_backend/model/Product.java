@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
 @Entity
 public class Product {
 
@@ -20,6 +21,7 @@ public class Product {
     private double price;
 
     @Column(nullable = false)
+    //@Min(value = 0, message = "Stock cannot be negative")
     private int stock;
 
     // Constructors, Getters, and Setters

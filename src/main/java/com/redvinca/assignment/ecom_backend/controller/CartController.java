@@ -1,9 +1,11 @@
 package com.redvinca.assignment.ecom_backend.controller;
 
-import com.example.shoppingcart.model.Cart;
-import com.example.shoppingcart.service.CartService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.redvinca.assignment.ecom_backend.model.Cart;
+import com.redvinca.assignment.ecom_backend.service.CartService;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
