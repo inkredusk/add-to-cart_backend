@@ -94,8 +94,8 @@ public class CartController {
 
 	@PostMapping("/update-Quantity")
 	public ResponseEntity<MessageResponse> updateQuantity(@RequestBody UpdateQuanatityRequest request) {
-		MessageResponse response = cartServiceImpl.updateQuantity(request);
-		return ResponseEntity.ok().body(response);
+		cartServiceImpl.updateCartQuantity(request.getCartItemId(), request.getQuantityChange());
+		return ResponseEntity.ok().body(new MessageResponse("Quantity Updated"));
 	}
 
 	@PostMapping("deleteItemToCart")

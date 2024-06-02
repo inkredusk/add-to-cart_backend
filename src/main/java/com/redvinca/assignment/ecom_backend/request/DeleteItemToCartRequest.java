@@ -10,4 +10,21 @@ import lombok.NoArgsConstructor;
 public class DeleteItemToCartRequest {
 
 	private Integer cartId;
+
+	public Integer getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
+	}
+	
+	
+
+	public DeleteItemToCartRequest(Integer cartId) {
+		super();
+		this.cartId = cartId;
+	}
+	
+	
 }
