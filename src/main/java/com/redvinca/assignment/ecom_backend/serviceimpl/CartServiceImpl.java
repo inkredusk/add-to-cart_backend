@@ -17,32 +17,32 @@ import com.redvinca.assignment.ecom_backend.service.CartService;
 
 @Service
 public class CartServiceImpl implements CartService {
-	
+
 	@Autowired
 	private CartRepository cartRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
-	
+
 	@Autowired
 	private CartListRepository cartListRepository;
 
 	@Override
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
-		
+
 		Integer cartId=cartRequest.getCartId();
-		
+
 		if(!cartListRepository.existsById(cartId)) {
 			throw new RuntimeException("Cart id not found..!");
 		}
 		cartListRepository.deleteById(cartId);
-		
+
 		DeleteItemToCartResponse cartResponse=new DeleteItemToCartResponse();
 		cartResponse.setMessage("Cart Item deleted Successfully");
-		
+
 		return cartResponse;
 	}
-	
+
 	public Cart addToCart(Long productId) {
 		Product product  = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product Not Found"));
 		if (product.getStock() <= 0) {
@@ -87,14 +87,18 @@ public class CartServiceImpl implements CartService {
 		return cartRepository.findAll();
 	}
 
-	public double getTotalPrice() {
-		List<Cart> cartItems = cartRepository.findAll();
-		double totalPrice = 0.0;
-		for (Cart cart : cartItems) {
-			totalPrice += cart.getProduct().getPrice() * cart.getQuantity();
-		}
-		return totalPrice;
-	}
+	//	Below Function has deleted by Rutuja
+
+	//	public double getTotalPrice() {
+	//		List<Cart> cartItems = cartRepository.findAll();
+	//		double totalPrice = 0.0;
+	//		for (Cart cart : cartItems) {
+	//			totalPrice += cart.getProduct().getPrice() * cart.getQuantity();
+	//		}
+	//		return totalPrice;
+	//	}
+
+	
 
 	public int getTotalQuantity() {
 		List<Cart> cartItems = cartRepository.findAll();
@@ -103,6 +107,10 @@ public class CartServiceImpl implements CartService {
 			totalQuantity += cart.getQuantity();
 		}
 		return totalQuantity;
+	}
+	
+	public double getTotalPrice() {
+		return cartRepository.calculateTotalPrice();
 	}
 
 
