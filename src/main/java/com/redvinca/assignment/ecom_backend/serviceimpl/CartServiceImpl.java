@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.redvinca.assignment.ecom_backend.exception.CartNotFoundException;
+import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
+import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartListRepository;
@@ -30,21 +33,22 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
 
-		Integer cartId=cartRequest.getCartId();
+		Integer cartId = cartRequest.getCartId();
 
-		if(!cartListRepository.existsById(cartId)) {
+		if (!cartListRepository.existsById(cartId)) {
 			throw new RuntimeException("Cart id not found..!");
 		}
 		cartListRepository.deleteById(cartId);
 
-		DeleteItemToCartResponse cartResponse=new DeleteItemToCartResponse();
+		DeleteItemToCartResponse cartResponse = new DeleteItemToCartResponse();
 		cartResponse.setMessage("Cart Item deleted Successfully");
 
 		return cartResponse;
 	}
 
 	public Cart addToCart(Long productId) {
-		Product product  = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product Not Found"));
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new IllegalArgumentException("Product Not Found"));
 		if (product.getStock() <= 0) {
 			throw new IllegalArgumentException("Product is out of stock");
 		}
@@ -66,18 +70,20 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	public Cart updateCartQuantity(Long cartId, int quantity) {
-		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
-		Product product = cart.getProduct();
+	// Below function is deleted by Shweta
 
-
-		if (quantity > product.getStock()) {
-			throw new IllegalArgumentException("Quantity exceeds stock");
-		}
-
-		cart.setQuantity(quantity);
-		return cartRepository.save(cart);
-	}
+//	public Cart updateCartQuantity(Long cartId, int quantity) {
+//		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+//		Product product = cart.getProduct();
+//
+//
+//		if (quantity > product.getStock()) {
+//			throw new IllegalArgumentException("Quantity exceeds stock");
+//		}
+//
+//		cart.setQuantity(quantity);
+//		return cartRepository.save(cart);
+//	}
 
 	public void removeFromCart(Long cartId) {
 		cartRepository.deleteById(cartId);
@@ -87,18 +93,16 @@ public class CartServiceImpl implements CartService {
 		return cartRepository.findAll();
 	}
 
-	//	Below Function has deleted by Rutuja
+	// Below Function has deleted by Rutuja
 
-	//	public double getTotalPrice() {
-	//		List<Cart> cartItems = cartRepository.findAll();
-	//		double totalPrice = 0.0;
-	//		for (Cart cart : cartItems) {
-	//			totalPrice += cart.getProduct().getPrice() * cart.getQuantity();
-	//		}
-	//		return totalPrice;
-	//	}
-
-	
+	// public double getTotalPrice() {
+	// List<Cart> cartItems = cartRepository.findAll();
+	// double totalPrice = 0.0;
+	// for (Cart cart : cartItems) {
+	// totalPrice += cart.getProduct().getPrice() * cart.getQuantity();
+	// }
+	// return totalPrice;
+	// }
 
 	public int getTotalQuantity() {
 		List<Cart> cartItems = cartRepository.findAll();
@@ -108,10 +112,24 @@ public class CartServiceImpl implements CartService {
 		}
 		return totalQuantity;
 	}
-	
+
 	public double getTotalPrice() {
 		return cartRepository.calculateTotalPrice();
 	}
 
+	public Cart updateCartQuantity(Long cartId, int quantity) {
+		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart item not found"));
+		Product product = cart.getProduct();
+
+		if (quantity > product.getStock()) {
+			throw new InsufficientStockException("Quantity exceeds stock");
+		} else if (quantity < 0) {
+			throw new NegativeQuantityException("Quantity should not be negative");
+		} else {
+			cart.setQuantity(quantity);
+			return cartRepository.save(cart);
+		}
+
+	}
 
 }
