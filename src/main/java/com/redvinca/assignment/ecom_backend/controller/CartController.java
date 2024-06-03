@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.redvinca.assignment.ecom_backend.exception.CartNotFoundException;
+import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
+import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
@@ -42,14 +45,32 @@ public class CartController {
 		}
 	}
 
+	// this api is deleted by Shweta
+//	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
+//		try {
+//			Cart updatedCart = cartService.updateCartQuantity(cartId, quantity);
+//			return ResponseEntity.ok(updatedCart);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update cart item quantity");
+//		}
+//	}
+
 	@PutMapping("/update")
 	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
 		try {
 			Cart updatedCart = cartService.updateCartQuantity(cartId, quantity);
 			return ResponseEntity.ok(updatedCart);
+		} catch (CartNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (InsufficientStockException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (NegativeQuantityException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update cart item quantity");
+			// Handle unexpected exceptions
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
 		}
+
 	}
 
 	@DeleteMapping("/remove")
