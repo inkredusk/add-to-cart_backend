@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteItemToCartRequest {
 
-	private Integer cartId;
+	private Long cartId;
 
-	public Integer getCartId() {
+	public Long getCartId() {
 		return cartId;
 	}
 
-	public void setCartId(Integer cartId) {
+	public void setCartId(Long cartId) {
 		this.cartId = cartId;
 	}
 	
 	
 
-	public DeleteItemToCartRequest(Integer cartId) {
+	public DeleteItemToCartRequest(Long cartId) {
 		super();
 		this.cartId = cartId;
 	}

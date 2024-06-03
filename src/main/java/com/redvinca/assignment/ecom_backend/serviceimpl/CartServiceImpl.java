@@ -11,7 +11,6 @@ import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
-import com.redvinca.assignment.ecom_backend.repository.CartListRepository;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
@@ -27,18 +26,16 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Autowired
-	private CartListRepository cartListRepository;
 
 	@Override
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
 
-		Integer cartId = cartRequest.getCartId();
+		Long cartId = cartRequest.getCartId();
 
-		if (!cartListRepository.existsById(cartId)) {
+		if (!cartRepository.existsById(cartId)) {
 			throw new RuntimeException("Cart id not found..!");
 		}
-		cartListRepository.deleteById(cartId);
+		cartRepository.deleteById(cartId);
 
 		DeleteItemToCartResponse cartResponse = new DeleteItemToCartResponse();
 		cartResponse.setMessage("Cart Item deleted Successfully");
