@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.redvinca.assignment.ecom_backend.model.Cart;
+import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
+import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.service.CartService;
-import com.redvinca.assignment.ecom_backend.serviceImpl.CartServiceImpl;
 
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
 
-	@Autowired
-	private CartServiceImpl cartServiceImpl;
+	
 
 	@Autowired
 	private CartService cartService;
@@ -90,9 +90,13 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("/update-Quantity")
+	@PostMapping("/updateQuantity")
 	public ResponseEntity<MessageResponse> updateQuantity(@RequestBody UpdateQuanatityRequest request) {
-		MessageResponse response = cartServiceImpl.updateQuantity(request);
+		MessageResponse response = cartService.updateQuantity(request);
 		return ResponseEntity.ok().body(response);
+	}
+	@PostMapping("deleteItemToCart")
+	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
+		return cartService.deleteItemToCart(cartRequest);
 	}
 }

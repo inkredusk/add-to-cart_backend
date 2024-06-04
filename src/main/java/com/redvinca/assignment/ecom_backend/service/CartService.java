@@ -7,10 +7,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
+import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
+import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
+import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
+import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 
 @Service
 public class CartService {
@@ -81,5 +86,44 @@ public class CartService {
 		}
 		return totalQuantity;
 	}
+public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
+		
+		Long cartId=cartRequest.getCartId();
+		
+		if(!cartRepository.existsById(cartId)) {
+			throw new RuntimeException("Cart id not found..!");
+		}
+		cartRepository.deleteById(cartId);
+		
+		DeleteItemToCartResponse cartResponse=new DeleteItemToCartResponse();
+		cartResponse.setMessage("Cart Item deleted Successfully");
+		
+		return cartResponse;
+	}
+public MessageResponse updateQuantity(UpdateQuanatityRequest request) {
+	// Find the cart item by ID
+	Optional<Cart> cartItem = cartRepository.findById(request.getCartItemId());
+
+	if (!cartItem.isPresent()) {
+		throw new ProductNotFoundException("Cart item not found");
+	}
+
+	Cart cart = cartItem.get();
+
+	// Update the quantity
+	int newQuantity = cart.getQuantity() + request.getQuantityChange();
+	if (newQuantity <= 0) {
+		throw new ProductNotFoundException("Quantity cannot be less than zero");
+	}
+
+	cart.setQuantity(newQuantity);
+
+	// Save the updated cart item
+	cart = cartRepository.save(cart);
+
+	MessageResponse response = new MessageResponse();
+	response.setMessage("Quantity updated Successfully..");
+	return response;
+}
 
 }

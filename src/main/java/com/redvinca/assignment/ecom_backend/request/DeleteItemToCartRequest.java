@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UpdateQuanatityRequest {
+@AllArgsConstructor
+public class DeleteItemToCartRequest {
 
-	private Long cartItemId;
-
-	private Integer quantityChange; // positive for increase, negative for decrease
+	private Long cartId;
 }
