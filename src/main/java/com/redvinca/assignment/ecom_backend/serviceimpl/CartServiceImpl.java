@@ -10,6 +10,7 @@ import com.redvinca.assignment.ecom_backend.exception.CartNotFoundException;
 import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
+
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
@@ -29,6 +30,7 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private ProductRepository productRepository;
 
+
 	@Override
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
 
@@ -44,6 +46,7 @@ public class CartServiceImpl implements CartService {
 
 		return cartResponse;
 	}
+
 
 	@Override
 	public Cart addToCart(Long productId) {
@@ -70,15 +73,17 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	@Override
+@Override
 	public void removeFromCart(Long cartId) {
 		cartRepository.deleteById(cartId);
 	}
+
 
 	@Override
 	public List<Cart> getAllCartItems() {
 		return cartRepository.findAll();
 	}
+
 
 	@Override
 	public int getTotalQuantity() {
@@ -90,10 +95,12 @@ public class CartServiceImpl implements CartService {
 		return totalQuantity;
 	}
 
+
 	@Override
 	public double getTotalPrice() {
 		return cartRepository.calculateTotalPrice();
 	}
+
 
 	@Override
 	public Cart updateCartQuantity(Long cartId, int quantity) {
@@ -110,6 +117,7 @@ public class CartServiceImpl implements CartService {
 		}
 
 	}
+
 
 	@Override
 	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuanatityRequest request) {
@@ -142,5 +150,6 @@ public class CartServiceImpl implements CartService {
 		response.setMessage("Quantity updated Successfully..");
 		return response;
 	}
+
 
 }

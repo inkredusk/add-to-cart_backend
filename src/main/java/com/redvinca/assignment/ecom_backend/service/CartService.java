@@ -8,8 +8,6 @@ import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 
-
-
 public interface CartService {
 
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest);
@@ -27,6 +25,7 @@ public interface CartService {
 	public int getTotalQuantity();
 	
 	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuanatityRequest request);
+
 	
 
 }

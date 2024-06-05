@@ -15,4 +15,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
 	@Query(value = "SELECT SUM(p.price * c.quantity) AS total_price FROM cart c JOIN product p ON c.product_id = p.id", nativeQuery = true)
 	Double calculateTotalPrice();
+	
 }
