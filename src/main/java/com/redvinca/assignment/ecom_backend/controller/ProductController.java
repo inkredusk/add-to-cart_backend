@@ -17,7 +17,7 @@ import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.service.ProductService;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/v3/api-docs/products")
 public class ProductController {
 
     @Autowired

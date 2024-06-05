@@ -22,7 +22,7 @@ import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.service.CartService;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/v3/api-docs/cart")
 public class CartController {
 
 	

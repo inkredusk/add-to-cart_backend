@@ -1,6 +1,5 @@
 package com.redvinca.assignment.ecom_backend.service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,8 @@ public class CartService {
 	private ProductRepository productRepository;
 
 	public Cart addToCart(Long productId) {
-		Product product  = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product Not Found"));
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new IllegalArgumentException("Product Not Found"));
 		if (product.getStock() <= 0) {
 			throw new IllegalArgumentException("Product is out of stock");
 		}
@@ -50,7 +50,8 @@ public class CartService {
 	}
 
 	public Cart updateCartQuantity(Long cartId, int quantity) {
-		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+		Cart cart = cartRepository.findById(cartId)
+				.orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
 		Product product = cart.getProduct();
 
 		if (quantity > product.getStock()) {
@@ -86,44 +87,53 @@ public class CartService {
 		}
 		return totalQuantity;
 	}
-public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
-		
-		Long cartId=cartRequest.getCartId();
-		
-		if(!cartRepository.existsById(cartId)) {
+
+	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
+
+		Long cartId = cartRequest.getCartId();
+
+		if (!cartRepository.existsById(cartId)) {
 			throw new RuntimeException("Cart id not found..!");
 		}
 		cartRepository.deleteById(cartId);
-		
-		DeleteItemToCartResponse cartResponse=new DeleteItemToCartResponse();
+
+		DeleteItemToCartResponse cartResponse = new DeleteItemToCartResponse();
 		cartResponse.setMessage("Cart Item deleted Successfully");
-		
+
 		return cartResponse;
 	}
-public MessageResponse updateQuantity(UpdateQuanatityRequest request) {
-	// Find the cart item by ID
-	Optional<Cart> cartItem = cartRepository.findById(request.getCartItemId());
 
-	if (!cartItem.isPresent()) {
-		throw new ProductNotFoundException("Cart item not found");
+	public MessageResponse updateQuantity(UpdateQuanatityRequest request) {
+		// Find the cart item by ID
+		Optional<Cart> cartItem = cartRepository.findById(request.getCartItemId());
+
+		Cart cart = cartItem.get();
+
+		Product product = cart.getProduct();
+
+		if (!cartItem.isPresent()) {
+			throw new ProductNotFoundException("Cart item not found");
+		}
+
+		// Update the quantity
+		int newQuantity = cart.getQuantity() + request.getQuantityChange();
+		
+		if (newQuantity <= 0) {
+			throw new ProductNotFoundException("Quantity cannot be less than zero");
+		}
+
+		if (newQuantity > product.getStock()) {
+			throw new IllegalArgumentException("Quantity exceeds stock");
+		}
+
+		cart.setQuantity(newQuantity);
+
+		// Save the updated cart item
+		cart = cartRepository.save(cart);
+
+		MessageResponse response = new MessageResponse();
+		response.setMessage("Quantity updated Successfully..");
+		return response;
 	}
-
-	Cart cart = cartItem.get();
-
-	// Update the quantity
-	int newQuantity = cart.getQuantity() + request.getQuantityChange();
-	if (newQuantity <= 0) {
-		throw new ProductNotFoundException("Quantity cannot be less than zero");
-	}
-
-	cart.setQuantity(newQuantity);
-
-	// Save the updated cart item
-	cart = cartRepository.save(cart);
-
-	MessageResponse response = new MessageResponse();
-	response.setMessage("Quantity updated Successfully..");
-	return response;
-}
 
 }
