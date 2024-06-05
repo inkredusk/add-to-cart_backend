@@ -12,4 +12,22 @@ public class UpdateQuanatityRequest {
 	private Long cartItemId;
 
 	private Integer quantityChange; // positive for increase, negative for decrease
+
+	public Long getCartItemId() {
+		return cartItemId;
+	}
+
+	public void setCartItemId(Long cartItemId) {
+		this.cartItemId = cartItemId;
+	}
+
+	public Integer getQuantityChange() {
+		return quantityChange;
+	}
+
+	public void setQuantityChange(Integer quantityChange) {
+		this.quantityChange = quantityChange;
+	}
+	
+	
 }

@@ -1,10 +1,6 @@
 package com.redvinca.assignment.ecom_backend.service;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
@@ -87,7 +83,7 @@ public class CartService {
 		}
 		return totalQuantity;
 	}
-
+  
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
 
 		Long cartId = cartRequest.getCartId();

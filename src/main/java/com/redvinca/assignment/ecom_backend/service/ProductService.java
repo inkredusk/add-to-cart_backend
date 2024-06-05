@@ -1,13 +1,12 @@
 package com.redvinca.assignment.ecom_backend.service;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
+import java.util.List;
 
 @Service
 public class ProductService {
