@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 import com.redvinca.assignment.ecom_backend.exception.CartNotFoundException;
 import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
+import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
+import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
+import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.service.CartService;
 
 @Service
@@ -25,7 +28,6 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	private ProductRepository productRepository;
-
 
 	@Override
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest) {
@@ -127,6 +129,38 @@ public class CartServiceImpl implements CartService {
 			return cartRepository.save(cart);
 		}
 
+	}
+
+	@Override
+	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuanatityRequest request) {
+		// Find the cart item by ID
+		Optional<Cart> cartItem = cartRepository.findById(request.getCartItemId());
+
+		Cart cart = cartItem.get();
+
+		Product product = cart.getProduct();
+
+		if (!cartItem.isPresent()) {
+			throw new ProductNotFoundException("Cart item not found");
+		}
+
+		// Update the quantity
+		int newQuantity = cart.getQuantity() + request.getQuantityChange();
+		if (newQuantity <= 0) {
+			throw new ProductNotFoundException("Quantity cannot be less than zero");
+		}
+
+		if (newQuantity > product.getStock()) {
+			throw new InsufficientStockException("Quantity exceeds stock");
+		}
+		cart.setQuantity(newQuantity);
+
+		// Save the updated cart item
+		cart = cartRepository.save(cart);
+
+		MessageResponse response = new MessageResponse();
+		response.setMessage("Quantity updated Successfully..");
+		return response;
 	}
 
 }
