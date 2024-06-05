@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteItemToCartRequest {
 
-	private Integer cartId;
+	private Long cartId;
 }

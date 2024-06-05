@@ -92,10 +92,10 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("/update-Quantity")
-	public ResponseEntity<MessageResponse> updateQuantity(@RequestBody UpdateQuanatityRequest request) {
-		MessageResponse response = cartServiceImpl.updateQuantity(request);
-		return ResponseEntity.ok().body(response);
+	@PostMapping("/updateQuantity")
+	public MessageResponse updateQuantity(@RequestBody UpdateQuanatityRequest request) {
+		return cartService.updateQuantityIncreaseDecrease(request);
+
 	}
 
 	@PostMapping("deleteItemToCart")
