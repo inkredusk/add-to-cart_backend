@@ -25,8 +25,6 @@ import com.redvinca.assignment.ecom_backend.service.CartService;
 @RequestMapping("/v3/api-docs/cart")
 public class CartController {
 
-	
-
 	@Autowired
 	private CartService cartService;
 
@@ -95,6 +93,7 @@ public class CartController {
 		MessageResponse response = cartService.updateQuantity(request);
 		return ResponseEntity.ok().body(response);
 	}
+
 	@PostMapping("deleteItemToCart")
 	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
 		return cartService.deleteItemToCart(cartRequest);
