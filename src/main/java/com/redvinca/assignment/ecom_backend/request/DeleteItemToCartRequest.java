@@ -18,13 +18,4 @@ public class DeleteItemToCartRequest {
 	public void setCartId(Long cartId) {
 		this.cartId = cartId;
 	}
-	
-	
-
-	public DeleteItemToCartRequest(Long cartId) {
-		super();
-		this.cartId = cartId;
-	}
-	
-	
 }

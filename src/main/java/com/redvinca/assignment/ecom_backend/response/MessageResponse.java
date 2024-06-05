@@ -17,12 +17,5 @@ public class MessageResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public MessageResponse(String message) {
-		super();
-		this.message = message;
-	}
-	
-	
+	}	
 }

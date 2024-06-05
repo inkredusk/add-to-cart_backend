@@ -17,21 +17,5 @@ public class DeleteItemToCartResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-	
-	
-
-	public DeleteItemToCartResponse() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public DeleteItemToCartResponse(String message) {
-		super();
-		this.message = message;
-	}
-	
-	
-	
-	
+	}	
 }
