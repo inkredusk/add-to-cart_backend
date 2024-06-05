@@ -19,12 +19,8 @@ public class DeleteItemToCartRequest {
 		this.cartId = cartId;
 	}
 	
-	
-
 	public DeleteItemToCartRequest(Long cartId) {
 		super();
 		this.cartId = cartId;
 	}
-	
-	
 }

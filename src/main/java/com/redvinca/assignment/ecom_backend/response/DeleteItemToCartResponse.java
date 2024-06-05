@@ -19,7 +19,6 @@ public class DeleteItemToCartResponse {
 		this.message = message;
 	}
 	
-	
 
 	public DeleteItemToCartResponse() {
 		super();
@@ -30,8 +29,5 @@ public class DeleteItemToCartResponse {
 		super();
 		this.message = message;
 	}
-	
-	
-	
-	
+
 }

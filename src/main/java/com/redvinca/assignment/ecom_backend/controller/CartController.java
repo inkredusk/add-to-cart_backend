@@ -26,11 +26,8 @@ import com.redvinca.assignment.ecom_backend.service.CartService;
 import com.redvinca.assignment.ecom_backend.serviceimpl.CartServiceImpl;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/v3/api-docs/cart")
 public class CartController {
-
-	@Autowired
-	private CartServiceImpl cartServiceImpl;
 
 	@Autowired
 	private CartService cartService;
@@ -113,7 +110,7 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("/update-Quantity")
+	@PostMapping("/updateQuantity")
 	public ResponseEntity<MessageResponse> updateQuantity(@RequestBody UpdateQuanatityRequest request) {
 		cartServiceImpl.updateCartQuantity(request.getCartItemId(), request.getQuantityChange());
 		return ResponseEntity.ok().body(new MessageResponse("Quantity Updated"));
@@ -122,5 +119,10 @@ public class CartController {
 	@PostMapping("deleteItemToCart")
 	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
 		return cartServiceImpl.deleteItemToCart(cartRequest);
+	}
+
+	@PostMapping("deleteItemToCart")
+	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
+		return cartService.deleteItemToCart(cartRequest);
 	}
 }
