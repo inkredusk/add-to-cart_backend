@@ -5,3 +5,4 @@ public class NegativeQuantityException extends RuntimeException{
 	        super(message);
 	    }
 }
+

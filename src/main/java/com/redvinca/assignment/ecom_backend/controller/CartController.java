@@ -38,16 +38,6 @@ public class CartController {
 		}
 	}
 
-	// this api is deleted by Shweta
-//	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
-//		try {
-//			Cart updatedCart = cartService.updateCartQuantity(cartId, quantity);
-//			return ResponseEntity.ok(updatedCart);
-//		} catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update cart item quantity");
-//		}
-//	}
-
 	@PutMapping("/update")
 	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
 		try {
@@ -106,11 +96,11 @@ public class CartController {
 		}
 	}
 
-//	@PostMapping("/updateQuantity")
-//	public ResponseEntity<MessageResponse> updateQuantity(@RequestBody UpdateQuanatityRequest request) {
-//		cartServiceImpl.updateCartQuantity(request.getCartItemId(), request.getQuantityChange());
-//		return ResponseEntity.ok().body(new MessageResponse("Quantity Updated"));
-//	}
+	@PostMapping("/updateQuantity")
+	public MessageResponse updateQuantity(@RequestBody UpdateQuanatityRequest request) {
+		return cartService.updateQuantityIncreaseDecrease(request);
+
+	}
 
 	@PostMapping("deleteItemToCart")
 	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
