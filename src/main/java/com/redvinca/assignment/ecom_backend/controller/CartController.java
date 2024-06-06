@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +18,7 @@ import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
-import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
-import com.redvinca.assignment.ecom_backend.response.MessageResponse;
-import com.redvinca.assignment.ecom_backend.service.CartService;
 import com.redvinca.assignment.ecom_backend.serviceimpl.CartServiceImpl;
 
 @RestController
@@ -30,32 +26,22 @@ import com.redvinca.assignment.ecom_backend.serviceimpl.CartServiceImpl;
 public class CartController {
 
 	@Autowired
-	private CartService cartService;
+	private CartServiceImpl cartServiceImpl;
 
 	@PostMapping("/add")
 	public ResponseEntity<?> addToCart(@RequestParam Long productId) {
 		try {
-			Cart addedCart = cartService.addToCart(productId);
+			Cart addedCart = cartServiceImpl.addToCart(productId);
 			return ResponseEntity.ok(addedCart);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add item to cart");
 		}
 	}
 
-	// this api is deleted by Shweta
-//	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
-//		try {
-//			Cart updatedCart = cartService.updateCartQuantity(cartId, quantity);
-//			return ResponseEntity.ok(updatedCart);
-//		} catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update cart item quantity");
-//		}
-//	}
-
 	@PutMapping("/update")
 	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
 		try {
-			Cart updatedCart = cartService.updateCartQuantity(cartId, quantity);
+			Cart updatedCart = cartServiceImpl.updateCartQuantity(cartId, quantity);
 			return ResponseEntity.ok(updatedCart);
 		} catch (CartNotFoundException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -73,7 +59,7 @@ public class CartController {
 	@DeleteMapping("/remove")
 	public ResponseEntity<?> removeFromCart(@RequestParam Long cartId) {
 		try {
-			cartService.removeFromCart(cartId);
+			cartServiceImpl.removeFromCart(cartId);
 			return ResponseEntity.ok("Item removed from cart");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove item from cart");
@@ -83,7 +69,7 @@ public class CartController {
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllCartItems() {
 		try {
-			List<Cart> cartItems = cartService.getAllCartItems();
+			List<Cart> cartItems = cartServiceImpl.getAllCartItems();
 			return ResponseEntity.ok(cartItems);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to retrieve cart items");
@@ -93,7 +79,7 @@ public class CartController {
 	@GetMapping("/total-price")
 	public ResponseEntity<?> getTotalPrice() {
 		try {
-			double totalPrice = cartService.getTotalPrice();
+			double totalPrice = cartServiceImpl.getTotalPrice();
 			return ResponseEntity.ok(totalPrice);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to calculate total price");
@@ -103,7 +89,7 @@ public class CartController {
 	@GetMapping("/total-quantity")
 	public ResponseEntity<?> getTotalQuantity() {
 		try {
-			int totalQuantity = cartService.getTotalQuantity();
+			int totalQuantity = cartServiceImpl.getTotalQuantity();
 			return ResponseEntity.ok(totalQuantity);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to calculate total quantity");
@@ -116,9 +102,13 @@ public class CartController {
 
 	}
 
+	}
+
+
 	@PostMapping("deleteItemToCart")
 	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
 		return cartService.deleteItemToCart(cartRequest);
 	}
+
 
 }

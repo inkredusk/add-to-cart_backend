@@ -10,6 +10,7 @@ import com.redvinca.assignment.ecom_backend.exception.CartNotFoundException;
 import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
+
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
@@ -45,6 +46,8 @@ public class CartServiceImpl implements CartService {
 		return cartResponse;
 	}
 
+
+	@Override
 	public Cart addToCart(Long productId) {
 		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new IllegalArgumentException("Product Not Found"));
@@ -69,40 +72,19 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	// Below function is deleted by Shweta
-
-//	public Cart updateCartQuantity(Long cartId, int quantity) {
-//		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
-//		Product product = cart.getProduct();
-//
-//
-//		if (quantity > product.getStock()) {
-//			throw new IllegalArgumentException("Quantity exceeds stock");
-//		}
-//
-//		cart.setQuantity(quantity);
-//		return cartRepository.save(cart);
-//	}
-
+@Override
 	public void removeFromCart(Long cartId) {
 		cartRepository.deleteById(cartId);
 	}
 
+
+	@Override
 	public List<Cart> getAllCartItems() {
 		return cartRepository.findAll();
 	}
 
-	// Below Function has deleted by Rutuja
 
-	// public double getTotalPrice() {
-	// List<Cart> cartItems = cartRepository.findAll();
-	// double totalPrice = 0.0;
-	// for (Cart cart : cartItems) {
-	// totalPrice += cart.getProduct().getPrice() * cart.getQuantity();
-	// }
-	// return totalPrice;
-	// }
-
+	@Override
 	public int getTotalQuantity() {
 		List<Cart> cartItems = cartRepository.findAll();
 		int totalQuantity = 0;
@@ -112,10 +94,14 @@ public class CartServiceImpl implements CartService {
 		return totalQuantity;
 	}
 
+
+	@Override
 	public double getTotalPrice() {
 		return cartRepository.calculateTotalPrice();
 	}
 
+
+	@Override
 	public Cart updateCartQuantity(Long cartId, int quantity) {
 		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart item not found"));
 		Product product = cart.getProduct();
@@ -130,6 +116,7 @@ public class CartServiceImpl implements CartService {
 		}
 
 	}
+
 
 	@Override
 	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuanatityRequest request) {
@@ -162,5 +149,6 @@ public class CartServiceImpl implements CartService {
 		response.setMessage("Quantity updated Successfully..");
 		return response;
 	}
+
 
 }
