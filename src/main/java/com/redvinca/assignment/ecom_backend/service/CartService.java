@@ -10,6 +10,7 @@ import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 
 public interface CartService {
 
+
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest);
 
 	public Cart addToCart(Long productId);
@@ -29,3 +30,4 @@ public interface CartService {
 	
 
 }
+

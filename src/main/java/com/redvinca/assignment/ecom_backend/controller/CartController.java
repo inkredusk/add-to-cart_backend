@@ -102,10 +102,13 @@ public class CartController {
 
 	}
 
-	@PostMapping("deleteItemToCart")
-	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
-		return cartServiceImpl.deleteItemToCart(cartRequest);
 	}
 
-	
+
+	@PostMapping("deleteItemToCart")
+	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
+		return cartService.deleteItemToCart(cartRequest);
+	}
+
+
 }
