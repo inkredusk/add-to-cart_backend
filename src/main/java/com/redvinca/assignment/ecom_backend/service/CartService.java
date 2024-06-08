@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
-import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
+import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 
@@ -25,7 +25,7 @@ public interface CartService {
 
 	public int getTotalQuantity();
 	
-	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuanatityRequest request);
+	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuantityRequest request);
 
 	
 
