@@ -110,5 +110,5 @@ public class CartController {
 		return cartServiceImpl.deleteItemToCart(cartRequest);
 	}
 
-	
+
 }
