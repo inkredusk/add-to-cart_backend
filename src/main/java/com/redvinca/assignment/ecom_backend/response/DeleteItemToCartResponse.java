@@ -8,11 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteItemToCartResponse {
-
 	private String message;
-
-	
-	
-	
-	
 }
