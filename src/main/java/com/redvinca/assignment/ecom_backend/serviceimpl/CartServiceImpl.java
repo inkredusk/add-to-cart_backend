@@ -16,7 +16,7 @@ import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
-import com.redvinca.assignment.ecom_backend.request.UpdateQuanatityRequest;
+import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.service.CartService;
@@ -120,7 +120,7 @@ public class CartServiceImpl implements CartService {
 
 
 	@Override
-	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuanatityRequest request) {
+	public MessageResponse updateQuantityIncreaseDecrease(UpdateQuantityRequest request) {
 		// Find the cart item by ID
 		Optional<Cart> cartItem = cartRepository.findById(request.getCartItemId());
 

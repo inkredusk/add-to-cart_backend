@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,9 @@ import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
+import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
+import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.serviceimpl.CartServiceImpl;
 
 @RestController
@@ -97,8 +100,8 @@ public class CartController {
 	}
 
 	@PostMapping("/updateQuantity")
-	public MessageResponse updateQuantity(@RequestBody UpdateQuanatityRequest request) {
-		return cartService.updateQuantityIncreaseDecrease(request);
+	public MessageResponse updateQuantity(@RequestBody UpdateQuantityRequest request) {
+		return cartServiceImpl.updateQuantityIncreaseDecrease(request);
 
 	}
 
