@@ -5,7 +5,7 @@ import java.util.List;
 import com.redvinca.assignment.ecom_backend.model.Product;
 
 // Service interface for managing product operations.
-public interface ProductService {
+public interface IProductService {
 
 	//This method is responsible for adding a new product to the inventory.
     public Product createProduct(Product product);

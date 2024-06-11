@@ -28,6 +28,6 @@ public class Product {
 	private double price;
 
 	@Column(nullable = false)
-	private int stock;
+	private Long stock;
 
 }

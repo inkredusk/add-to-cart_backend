@@ -1,4 +1,4 @@
-package com.redvinca.assignment.ecom_backend.constantvariables;
+package com.redvinca.assignment.ecom_backend.constants;
 
 public final class Constants {
 
@@ -69,7 +69,4 @@ public final class Constants {
     public static final String CONTROLLER_DELETE_ITEM_FROM_CART_STARTED = "deleteItemFromCart method started for cartId: {}";
     public static final String CONTROLLER_DELETE_ITEM_FROM_CART_ENDED = "deleteItemFromCart method ended for cartId: {}";
 
-    // URL constants
-    public static final String PRODUCT_API_URL = "/v3/api-docs/products";
-    public static final String CART_API_URL = "/v3/api-docs/cart";
 }

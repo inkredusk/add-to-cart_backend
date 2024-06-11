@@ -7,14 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.redvinca.assignment.ecom_backend.constantvariables.Constants;
+import com.redvinca.assignment.ecom_backend.constants.Constants;
 import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
-import com.redvinca.assignment.ecom_backend.service.ProductService;
+import com.redvinca.assignment.ecom_backend.service.IProductService;
+import com.redvinca.assignment.ecom_backend.util.ValidationUtil;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements IProductService {
 
     // Logger for logging the flow and important events in the service
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -33,7 +34,9 @@ public class ProductServiceImpl implements ProductService {
         logger.info(Constants.CREATE_PRODUCT_STARTED, product.getName());
         
         // Check if product details are valid
-        if (product.getName() == null || product.getName().trim().isEmpty() || product.getPrice() == 0 || product.getStock() == 0) {
+        if (ValidationUtil.isNullOrEmpty(product.getName()) || 
+            ValidationUtil.isNullOrZero(product.getPrice()) || 
+            ValidationUtil.isNullOrNegative(product.getStock())) {
             throw new ProductNotFoundException(Constants.PRODUCT_DETAILS_INVALID);
         }
         

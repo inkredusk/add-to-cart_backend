@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.redvinca.assignment.ecom_backend.constantvariables.Constants;
+import com.redvinca.assignment.ecom_backend.constants.Constants;
 import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
 import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
 import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
@@ -21,6 +21,7 @@ import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.service.ICartService;
+import com.redvinca.assignment.ecom_backend.util.ValidationUtil;
 
 @Service
 public class CartServiceImpl implements ICartService {
@@ -43,7 +44,7 @@ public class CartServiceImpl implements ICartService {
 	public Cart addToCart(Long productId) {
 		logger.info(Constants.ADD_TO_CART_STARTED, productId);
 
-		if (productId <= 0) {
+		if (ValidationUtil.isNullOrNegative(productId)) {
 			throw new ProductNotFoundException(Constants.PRODUCT_ID_INVALID);
 		}
 		Product product = productRepository.findById(productId)
@@ -98,12 +99,10 @@ public class CartServiceImpl implements ICartService {
 		logger.info(Constants.DELETE_ITEM_TO_CART_STARTED, cartRequest.getCartId());
 
 		Long cartId = cartRequest.getCartId();
-		if (cartId <= 0) {
+		if (ValidationUtil.isNullOrNegative(cartId)) {
 			logger.error(Constants.QUANTITY_LESS_THAN_ZERO, cartRequest.getCartId());
 			throw new NegativeQuantityException(Constants.CART_ID_INVALID);
 		}
-
-		
 
 		if (!cartRepository.existsById(cartId)) {
 			logger.error(Constants.CART_ID_NOT_FOUND, cartId);
