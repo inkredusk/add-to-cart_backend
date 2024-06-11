@@ -1,8 +1,7 @@
 package com.redvinca.assignment.ecom_backend.controller;
 
-
-
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,40 +10,70 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.service.ProductService;
+import com.redvinca.assignment.ecom_backend.constantvariables.Constants;
 
 @RestController
-@RequestMapping("/v3/api-docs/products")
+@RequestMapping(Constants.PRODUCT_API_URL)
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody Product product) {
-        try {
-            Product createdProduct = productService.createProduct(product);
-            return ResponseEntity.ok(createdProduct);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to add item");
-        }
-    }
+	@Autowired
+	private ProductService productService;
 
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        return ResponseEntity.ok(products);
-    }
+	/**
+	 * Creates a new product.
+	 * 
+	 * @param product the product to be created.
+	 * @return the response entity with the created product or an error message.
+	 */
+	@PostMapping
+	public ResponseEntity<?> createProduct(@RequestBody Product product) {
+		logger.info(Constants.CONTROLLER_CREATE_PRODUCT_STARTED, product.getName());
+		try {
+			Product createdProduct = productService.createProduct(product);
+			logger.info(Constants.CONTROLLER_PRODUCT_CREATED_SUCCESSFULLY, createdProduct.getName());
+			return ResponseEntity.ok(createdProduct);
+		} catch (Exception e) {
+			logger.error(Constants.PRODUCT_DETAILS_INVALID, e);
+			return ResponseEntity.status(500).body(Constants.PRODUCT_DETAILS_INVALID);
+		}
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        if (product != null) {
-            return ResponseEntity.ok(product);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+	/**
+	 * Retrieves all products.
+	 * 
+	 * @return the response entity with the list of products.
+	 */
+	@GetMapping
+	public ResponseEntity<List<Product>> getAllProducts() {
+		logger.info(Constants.CONTROLLER_GET_ALL_PRODUCTS_STARTED);
+		List<Product> products = productService.getAllProducts();
+		logger.info(Constants.CONTROLLER_RETRIEVED_PRODUCTS, products.size());
+		return ResponseEntity.ok(products);
+	}
+
+	/**
+	 * Retrieves a product by its ID.
+	 * 
+	 * @param id the ID of the product to be retrieved.
+	 * @return the response entity with the product or not found status.
+	 */
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getProductById(@PathVariable Long id) {
+		logger.info(Constants.CONTROLLER_GET_PRODUCT_BY_ID_STARTED, id);
+		Product product = productService.getProductById(id);
+		if (product != null) {
+			logger.info(Constants.CONTROLLER_PRODUCT_FOUND, id);
+			return ResponseEntity.ok(product);
+		} else {
+			logger.error(Constants.PRODUCT_ID_INVALID);
+			return ResponseEntity.status(500).body(Constants.PRODUCT_ID_INVALID);
+		}
+	}
 }

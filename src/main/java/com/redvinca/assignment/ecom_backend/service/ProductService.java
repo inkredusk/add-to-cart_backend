@@ -1,28 +1,18 @@
 package com.redvinca.assignment.ecom_backend.service;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.redvinca.assignment.ecom_backend.model.Product;
-import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
 import java.util.List;
 
-@Service
-public class ProductService {
+import com.redvinca.assignment.ecom_backend.model.Product;
 
-    @Autowired
-    private ProductRepository productRepository;
+// Service interface for managing product operations.
+public interface ProductService {
 
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
-    }
+	//This method is responsible for adding a new product to the inventory.
+    public Product createProduct(Product product);
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
+    //This method fetches all products available in the inventory.
+    public List<Product> getAllProducts();
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
-    }
+    //This method fetches a specific product from the inventory based on its ID.
+    public Product getProductById(Long id);
 }

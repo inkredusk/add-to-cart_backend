@@ -2,21 +2,19 @@ package com.redvinca.assignment.ecom_backend.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.redvinca.assignment.ecom_backend.exception.CartNotFoundException;
-import com.redvinca.assignment.ecom_backend.exception.InsufficientStockException;
-import com.redvinca.assignment.ecom_backend.exception.NegativeQuantityException;
+import com.redvinca.assignment.ecom_backend.constantvariables.Constants;
 import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
@@ -25,90 +23,113 @@ import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.serviceimpl.CartServiceImpl;
 
 @RestController
-@RequestMapping("/v3/api-docs/cart")
+@RequestMapping(Constants.CART_API_URL)
 public class CartController {
+
+	private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
 	@Autowired
 	private CartServiceImpl cartServiceImpl;
 
+	/**
+	 * Adds a product to the cart.
+	 * 
+	 * @param productId the ID of the product to be added.
+	 * @return the response entity with the added cart item or error message.
+	 */
 	@PostMapping("/add")
 	public ResponseEntity<?> addToCart(@RequestParam Long productId) {
+		logger.info(Constants.CONTROLLER_ADD_TO_CART_STARTED, productId);
 		try {
 			Cart addedCart = cartServiceImpl.addToCart(productId);
+			logger.info(Constants.CONTROLLER_ADD_TO_CART_SUCCESS, productId);
 			return ResponseEntity.ok(addedCart);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add item to cart");
+			logger.error(Constants.PRODUCT_ID_INVALID, productId, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.PRODUCT_ID_INVALID);
 		}
 	}
 
-	@PutMapping("/update")
-	public ResponseEntity<?> updateCartQuantity(@RequestParam Long cartId, @RequestParam int quantity) {
-		try {
-			Cart updatedCart = cartServiceImpl.updateCartQuantity(cartId, quantity);
-			return ResponseEntity.ok(updatedCart);
-		} catch (CartNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} catch (InsufficientStockException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		} catch (NegativeQuantityException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		} catch (Exception e) {
-			// Handle unexpected exceptions
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
-		}
-
-	}
-
-	@DeleteMapping("/remove")
-	public ResponseEntity<?> removeFromCart(@RequestParam Long cartId) {
-		try {
-			cartServiceImpl.removeFromCart(cartId);
-			return ResponseEntity.ok("Item removed from cart");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to remove item from cart");
-		}
-	}
-
+	/**
+	 * Retrieves all items in the cart.
+	 * 
+	 * @return the response entity with the list of cart items or error message.
+	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllCartItems() {
+		logger.info(Constants.CONTROLLER_GET_ALL_CART_ITEMS_STARTED);
 		try {
 			List<Cart> cartItems = cartServiceImpl.getAllCartItems();
+			logger.info(Constants.CONTROLLER_GET_ALL_CART_ITEMS_SUCCESS, cartItems.size());
 			return ResponseEntity.ok(cartItems);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to retrieve cart items");
+			logger.error(Constants.CONTROLLER_GET_ALL_CART_ITEMS_FAILURE, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.CONTROLLER_GET_ALL_CART_ITEMS_FAILURE);
 		}
 	}
 
+	/**
+	 * Calculates the total price of all items in the cart.
+	 * 
+	 * @return the response entity with the total price or error message.
+	 */
 	@GetMapping("/total-price")
 	public ResponseEntity<?> getTotalPrice() {
+		logger.info(Constants.CONTROLLER_GET_TOTAL_PRICE_STARTED);
 		try {
 			double totalPrice = cartServiceImpl.getTotalPrice();
+			logger.info(Constants.CONTROLLER_GET_TOTAL_PRICE_SUCCESS, totalPrice);
 			return ResponseEntity.ok(totalPrice);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to calculate total price");
+			logger.error(Constants.CONTROLLER_GET_TOTAL_PRICE_FAILURE, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.CONTROLLER_GET_TOTAL_PRICE_FAILURE);
 		}
 	}
 
+	/**
+	 * Calculates the total quantity of all items in the cart.
+	 * 
+	 * @return the response entity with the total quantity or error message.
+	 */
 	@GetMapping("/total-quantity")
 	public ResponseEntity<?> getTotalQuantity() {
+		logger.info(Constants.CONTROLLER_GET_TOTAL_QUANTITY_STARTED);
 		try {
 			int totalQuantity = cartServiceImpl.getTotalQuantity();
+			logger.info(Constants.CONTROLLER_GET_TOTAL_QUANTITY_SUCCESS, totalQuantity);
 			return ResponseEntity.ok(totalQuantity);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to calculate total quantity");
+			logger.error(Constants.CONTROLLER_GET_TOTAL_QUANTITY_FAILURE, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.CONTROLLER_GET_TOTAL_QUANTITY_FAILURE);
 		}
 	}
 
+	/**
+	 * Updates the quantity of a cart item.
+	 * 
+	 * @param request the request containing the cart item ID and the quantity
+	 *                change.
+	 * @return the response entity with a success message or error message.
+	 */
 	@PostMapping("/updateQuantity")
 	public MessageResponse updateQuantity(@RequestBody UpdateQuantityRequest request) {
-		return cartServiceImpl.updateQuantityIncreaseDecrease(request);
-
+		logger.info(Constants.CONTROLLER_UPDATE_QUANTITY_STARTED, request.getCartItemId(), request.getQuantityChange());
+		MessageResponse response = cartServiceImpl.updateQuantityIncreaseDecrease(request);
+		logger.info(Constants.CONTROLLER_UPDATE_QUANTITY_ENDED, request.getCartItemId());
+		return response;
 	}
 
+	/**
+	 * Deletes an item from the cart.
+	 * 
+	 * @param cartRequest the request containing the cart ID.
+	 * @return the response entity with a success message or error message.
+	 */
 	@PostMapping("deleteItemToCart")
-	public DeleteItemToCartResponse deleteItemFromCart(DeleteItemToCartRequest cartRequest) {
-		return cartServiceImpl.deleteItemToCart(cartRequest);
+	public DeleteItemToCartResponse deleteItemFromCart(@RequestBody DeleteItemToCartRequest cartRequest) {
+		logger.info(Constants.CONTROLLER_DELETE_ITEM_FROM_CART_STARTED, cartRequest.getCartId());
+		DeleteItemToCartResponse response = cartServiceImpl.deleteItemToCart(cartRequest);
+		logger.info(Constants.CONTROLLER_DELETE_ITEM_FROM_CART_ENDED, cartRequest.getCartId());
+		return response;
 	}
-
-
 }

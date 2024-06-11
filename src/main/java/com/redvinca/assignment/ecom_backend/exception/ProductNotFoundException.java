@@ -1,11 +1,9 @@
 package com.redvinca.assignment.ecom_backend.exception;
 
-public class ProductNotFoundException extends RuntimeException{
+import lombok.AllArgsConstructor;
 
-	private static final long serialVersionUID = -675661251666854040L;
+@AllArgsConstructor
+public class ProductNotFoundException extends RuntimeException {
 
-	public ProductNotFoundException(String message) {
-		super(message);
-
-	}
+ private String messString;
 }
