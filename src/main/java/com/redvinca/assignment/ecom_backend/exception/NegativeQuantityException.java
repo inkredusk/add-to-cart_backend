@@ -1,8 +1,12 @@
 package com.redvinca.assignment.ecom_backend.exception;
 
-public class NegativeQuantityException extends RuntimeException{
-	 public NegativeQuantityException(String message) {
-	        super(message);
-	    }
-}
+import lombok.AllArgsConstructor;
 
+/**
+ * Custom exception class for negative quantity scenario.
+ */
+@AllArgsConstructor
+public class NegativeQuantityException extends RuntimeException {
+
+	private String messString;
+}
