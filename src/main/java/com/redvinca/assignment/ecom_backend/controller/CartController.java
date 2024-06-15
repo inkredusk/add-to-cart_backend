@@ -45,8 +45,8 @@ public class CartController {
             logger.info(Constants.CONTROLLER_ADD_TO_CART_SUCCESS, productId);
             return ResponseEntity.ok(addedCart);
         } catch (Exception e) {
-            logger.error(Constants.PRODUCT_ID_INVALID, productId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.PRODUCT_ID_INVALID);
+            logger.error(Constants.PRODUCT_NOT_FOUND, productId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.PRODUCT_NOT_FOUND);
         }
     }
 
