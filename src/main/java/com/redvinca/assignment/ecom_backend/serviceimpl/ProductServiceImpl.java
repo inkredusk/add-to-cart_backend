@@ -76,7 +76,7 @@ public class ProductServiceImpl implements IProductService {
         if (product != null) {
             logger.info(Constants.PRODUCT_FOUND, id);
         } else {
-            logger.error(Constants.PRODUCT_ID_INVALID);
+            logger.error(Constants.PRODUCT_NOT_FOUND);
         }
         logger.info(Constants.GET_PRODUCT_BY_ID_ENDED, id);
         return product;
