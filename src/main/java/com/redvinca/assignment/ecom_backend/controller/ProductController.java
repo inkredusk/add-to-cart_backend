@@ -22,8 +22,6 @@ import com.redvinca.assignment.ecom_backend.service.IProductService;
 @RequestMapping("${product.api.url}") // Base URL from properties file
 public class ProductController {
     
-    @Value("${product.api.url}")
-    private String productApiUrl;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -36,7 +34,7 @@ public class ProductController {
      * @param product the product to be created.
      * @return the response entity with the created product or an error message.
      */
-    @PostMapping
+    @PostMapping("/createProduct")
     public ResponseEntity<?> createProduct(@RequestBody Product product) {
         logger.info(Constants.CONTROLLER_CREATE_PRODUCT_STARTED, product.getName());
         try {
@@ -54,7 +52,7 @@ public class ProductController {
      * 
      * @return the response entity with the list of products.
      */
-    @GetMapping
+    @GetMapping("/getAllProducts")
     public ResponseEntity<List<Product>> getAllProducts() {
         logger.info(Constants.CONTROLLER_GET_ALL_PRODUCTS_STARTED);
         List<Product> products = iProductService.getAllProducts();
@@ -68,7 +66,7 @@ public class ProductController {
      * @param id the ID of the product to be retrieved.
      * @return the response entity with the product or not found status.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/getProductById/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Long id) {
         logger.info(Constants.CONTROLLER_GET_PRODUCT_BY_ID_STARTED, id);
         Product product = iProductService.getProductById(id);
