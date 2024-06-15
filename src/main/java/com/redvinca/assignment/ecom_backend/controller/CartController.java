@@ -37,7 +37,7 @@ public class CartController {
      * @param productId the ID of the product to be added.
      * @return the response entity with the added cart item or error message.
      */
-    @PostMapping("/add")
+    @PostMapping("/addToCart")
     public ResponseEntity<?> addToCart(@RequestParam Long productId) {
         logger.info(Constants.CONTROLLER_ADD_TO_CART_STARTED, productId);
         try {
@@ -55,7 +55,7 @@ public class CartController {
      * 
      * @return the response entity with the list of cart items or error message.
      */
-    @GetMapping("/all")
+    @GetMapping("/getAllCartItems")
     public ResponseEntity<?> getAllCartItems() {
         logger.info(Constants.CONTROLLER_GET_ALL_CART_ITEMS_STARTED);
         try {
@@ -73,7 +73,7 @@ public class CartController {
      * 
      * @return the response entity with the total price or error message.
      */
-    @GetMapping("/total-price")
+    @GetMapping("/getTotalPrice")
     public ResponseEntity<?> getTotalPrice() {
         logger.info(Constants.CONTROLLER_GET_TOTAL_PRICE_STARTED);
         try {
@@ -91,7 +91,7 @@ public class CartController {
      * 
      * @return the response entity with the total quantity or error message.
      */
-    @GetMapping("/total-quantity")
+    @GetMapping("/getTotalQuantity")
     public ResponseEntity<?> getTotalQuantity() {
         logger.info(Constants.CONTROLLER_GET_TOTAL_QUANTITY_STARTED);
         try {
@@ -125,7 +125,7 @@ public class CartController {
      * @param cartRequest the request containing the cart ID.
      * @return the response entity with a success message or error message.
      */
-    @PostMapping("/deleteItemToCart")
+    @PostMapping("/deleteItemFromCart")
     public DeleteItemToCartResponse deleteItemFromCart(@RequestBody DeleteItemToCartRequest cartRequest) {
         logger.info(Constants.CONTROLLER_DELETE_ITEM_FROM_CART_STARTED, cartRequest.getCartId());
         DeleteItemToCartResponse response = cartServiceImpl.deleteItemToCart(cartRequest);
