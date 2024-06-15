@@ -1,12 +1,16 @@
 package com.redvinca.assignment.ecom_backend.exception;
 
-import lombok.AllArgsConstructor;
-
 /**
  * Custom exception class for negative quantity scenario.
  */
-@AllArgsConstructor
 public class NegativeQuantityException extends RuntimeException {
 
-	private String messString;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5011941422737314068L;
+
+	public NegativeQuantityException(String message) {
+		super(message);
+	}
 }

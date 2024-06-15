@@ -19,65 +19,65 @@ import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.service.IProductService;
 
 @RestController
-@RequestMapping
+@RequestMapping("${product.api.url}") // Base URL from properties file
 public class ProductController {
-	
-	@Value("${product.api.url}")
+    
+    @Value("${product.api.url}")
     private String productApiUrl;
 
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-	@Autowired
-	private IProductService iProductService;
+    @Autowired
+    private IProductService iProductService;
 
-	/**
-	 * Creates a new product.
-	 * 
-	 * @param product the product to be created.
-	 * @return the response entity with the created product or an error message.
-	 */
-	@PostMapping
-	public ResponseEntity<?> createProduct(@RequestBody Product product) {
-		logger.info(Constants.CONTROLLER_CREATE_PRODUCT_STARTED, product.getName());
-		try {
-			Product createdProduct = iProductService.createProduct(product);
-			logger.info(Constants.CONTROLLER_PRODUCT_CREATED_SUCCESSFULLY, createdProduct.getName());
-			return ResponseEntity.ok(createdProduct);
-		} catch (Exception e) {
-			logger.error(Constants.PRODUCT_DETAILS_INVALID, e);
-			return ResponseEntity.status(500).body(Constants.PRODUCT_DETAILS_INVALID);
-		}
-	}
+    /**
+     * Creates a new product.
+     * 
+     * @param product the product to be created.
+     * @return the response entity with the created product or an error message.
+     */
+    @PostMapping
+    public ResponseEntity<?> createProduct(@RequestBody Product product) {
+        logger.info(Constants.CONTROLLER_CREATE_PRODUCT_STARTED, product.getName());
+        try {
+            Product createdProduct = iProductService.createProduct(product);
+            logger.info(Constants.CONTROLLER_PRODUCT_CREATED_SUCCESSFULLY, createdProduct.getName());
+            return ResponseEntity.ok(createdProduct);
+        } catch (Exception e) {
+            logger.error(Constants.PRODUCT_DETAILS_INVALID, e);
+            return ResponseEntity.status(500).body(Constants.PRODUCT_DETAILS_INVALID);
+        }
+    }
 
-	/**
-	 * Retrieves all products.
-	 * 
-	 * @return the response entity with the list of products.
-	 */
-	@GetMapping
-	public ResponseEntity<List<Product>> getAllProducts() {
-		logger.info(Constants.CONTROLLER_GET_ALL_PRODUCTS_STARTED);
-		List<Product> products = iProductService.getAllProducts();
-		logger.info(Constants.CONTROLLER_RETRIEVED_PRODUCTS, products.size());
-		return ResponseEntity.ok(products);
-	}
+    /**
+     * Retrieves all products.
+     * 
+     * @return the response entity with the list of products.
+     */
+    @GetMapping
+    public ResponseEntity<List<Product>> getAllProducts() {
+        logger.info(Constants.CONTROLLER_GET_ALL_PRODUCTS_STARTED);
+        List<Product> products = iProductService.getAllProducts();
+        logger.info(Constants.CONTROLLER_RETRIEVED_PRODUCTS, products.size());
+        return ResponseEntity.ok(products);
+    }
 
-	/**
-	 * Retrieves a product by its ID.
-	 * 
-	 * @param id the ID of the product to be retrieved.
-	 * @return the response entity with the product or not found status.
-	 */
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getProductById(@PathVariable Long id) {
-		logger.info(Constants.CONTROLLER_GET_PRODUCT_BY_ID_STARTED, id);
-		Product product = iProductService.getProductById(id);
-		if (product != null) {
-			logger.info(Constants.CONTROLLER_PRODUCT_FOUND, id);
-			return ResponseEntity.ok(product);
-		} else {
-			logger.error(Constants.PRODUCT_ID_INVALID);
-			return ResponseEntity.status(500).body(Constants.PRODUCT_ID_INVALID);
-		}
-	}
+    /**
+     * Retrieves a product by its ID.
+     * 
+     * @param id the ID of the product to be retrieved.
+     * @return the response entity with the product or not found status.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable Long id) {
+        logger.info(Constants.CONTROLLER_GET_PRODUCT_BY_ID_STARTED, id);
+        Product product = iProductService.getProductById(id);
+        if (product != null) {
+            logger.info(Constants.CONTROLLER_PRODUCT_FOUND, id);
+            return ResponseEntity.ok(product);
+        } else {
+            logger.error(Constants.PRODUCT_NOT_FOUND);
+            return ResponseEntity.status(500).body(Constants.PRODUCT_NOT_FOUND);
+        }
+    }
 }

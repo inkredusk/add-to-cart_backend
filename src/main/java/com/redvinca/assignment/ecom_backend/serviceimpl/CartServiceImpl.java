@@ -162,8 +162,8 @@ public class CartServiceImpl implements ICartService {
 		Optional<Cart> cartItem = cartRepository.findById(request.getCartItemId());
 
 		if (!cartItem.isPresent()) {
-			logger.error(Constants.CART_ITEM_NOT_FOUND, request.getCartItemId());
-			throw new ProductNotFoundException(Constants.CART_ITEM_NOT_FOUND);
+			logger.error(Constants.CART_ID_NOT_FOUND, request.getCartItemId());
+			throw new ProductNotFoundException(Constants.CART_ID_NOT_FOUND);
 		}
 
 		Cart cart = cartItem.get();

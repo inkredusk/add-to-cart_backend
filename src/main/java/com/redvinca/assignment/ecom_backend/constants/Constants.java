@@ -16,7 +16,7 @@ public final class Constants {
 
 	public static final String DELETE_ITEM_TO_CART_STARTED = "deleteItemToCart method started for cartId: {}";
 	public static final String CART_ID_INVALID = "CartId should be greater than 0";
-	public static final String CART_ID_NOT_FOUND = "Cart id not found for cartId: {}";
+	public static final String CART_ID_NOT_FOUND = "Cart id not found";
 	public static final String DELETE_ITEM_TO_CART_ENDED = "deleteItemToCart method ended for cartId: {}";
 	public static final String CART_ITEM_DELETED_SUCCESSFULLY = "Cart Item deleted Successfully";
 
