@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import com.redvinca.assignment.ecom_backend.service.IProductService;
 @RestController
 @RequestMapping("${product.api.url}") // Base URL from properties file
 public class ProductController {
-    
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -34,7 +32,7 @@ public class ProductController {
      * @param product the product to be created.
      * @return the response entity with the created product or an error message.
      */
-    @PostMapping("/createProduct")
+    @PostMapping("${product.api.createProduct}")
     public ResponseEntity<?> createProduct(@RequestBody Product product) {
         logger.info(Constants.CONTROLLER_CREATE_PRODUCT_STARTED, product.getName());
         try {
@@ -52,7 +50,7 @@ public class ProductController {
      * 
      * @return the response entity with the list of products.
      */
-    @GetMapping("/getAllProducts")
+    @GetMapping("${product.api.getAllProducts}")
     public ResponseEntity<List<Product>> getAllProducts() {
         logger.info(Constants.CONTROLLER_GET_ALL_PRODUCTS_STARTED);
         List<Product> products = iProductService.getAllProducts();
@@ -66,7 +64,7 @@ public class ProductController {
      * @param id the ID of the product to be retrieved.
      * @return the response entity with the product or not found status.
      */
-    @GetMapping("/getProductById/{id}")
+    @GetMapping("${product.api.getProductById}")
     public ResponseEntity<?> getProductById(@PathVariable Long id) {
         logger.info(Constants.CONTROLLER_GET_PRODUCT_BY_ID_STARTED, id);
         Product product = iProductService.getProductById(id);
