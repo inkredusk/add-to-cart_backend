@@ -16,8 +16,10 @@ import com.redvinca.assignment.ecom_backend.model.Cart;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.repository.CartRepository;
 import com.redvinca.assignment.ecom_backend.repository.ProductRepository;
+import com.redvinca.assignment.ecom_backend.request.AddToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
+import com.redvinca.assignment.ecom_backend.response.AddToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 import com.redvinca.assignment.ecom_backend.service.ICartService;
@@ -40,10 +42,12 @@ public class CartServiceImpl implements ICartService {
 	 * @param productId the ID of the product to add to the cart.
 	 * @return the updated cart item.
 	 */
-	@Override
-	public Cart addToCart(Long productId) {
-		logger.info(Constants.ADD_TO_CART_STARTED, productId);
 
+	@Override
+	public AddToCartResponse addToCart(AddToCartRequest cartAddToCartRequest) {
+		logger.info(Constants.ADD_TO_CART_STARTED, cartAddToCartRequest.getProductId());
+
+		Long productId = cartAddToCartRequest.getProductId();
 		if (ValidationUtil.isNullOrNegative(productId)) {
 			throw new ProductNotFoundException(Constants.PRODUCT_ID_INVALID);
 		}
@@ -62,7 +66,7 @@ public class CartServiceImpl implements ICartService {
 				cart.setQuantity(cart.getQuantity() + 1);
 			} else {
 				logger.error(Constants.QUANTITY_EXCEEDS_STOCK, productId);
-				throw new ProductNotFoundException(Constants.PORDUCT_OUT_OF_STOCK_EXCEPTION);
+				throw new InsufficientStockException(Constants.QUANTITY_EXCEEDS_STOCK);
 			}
 		} else {
 			cart = new Cart();
@@ -70,9 +74,12 @@ public class CartServiceImpl implements ICartService {
 			cart.setQuantity(1); // Default quantity
 		}
 
-		Cart savedCart = cartRepository.save(cart);
+		cartRepository.save(cart); // Save the cart item to persist changes
+
+		AddToCartResponse addToCartResponse = new AddToCartResponse();
+		addToCartResponse.setMessage(Constants.CART_ITEM_ADDED_SUCCESSFULLY); // Update with relevant message
 		logger.info(Constants.ADD_TO_CART_ENDED, productId);
-		return savedCart;
+		return addToCartResponse;
 	}
 
 	/**

@@ -3,8 +3,10 @@ package com.redvinca.assignment.ecom_backend.service;
 import java.util.List;
 
 import com.redvinca.assignment.ecom_backend.model.Cart;
+import com.redvinca.assignment.ecom_backend.request.AddToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.DeleteItemToCartRequest;
 import com.redvinca.assignment.ecom_backend.request.UpdateQuantityRequest;
+import com.redvinca.assignment.ecom_backend.response.AddToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.DeleteItemToCartResponse;
 import com.redvinca.assignment.ecom_backend.response.MessageResponse;
 
@@ -15,7 +17,7 @@ public interface ICartService {
 	public DeleteItemToCartResponse deleteItemToCart(DeleteItemToCartRequest cartRequest);
 
 	// Adds a product to the cart.
-	public Cart addToCart(Long productId);
+	public AddToCartResponse addToCart(AddToCartRequest addToCartRequest);
 
 	// Retrieves all items in the cart.
 	public List<Cart> getAllCartItems();

@@ -32,6 +32,7 @@ public final class Constants {
 	public static final String INSUFFICIENT_STOCK = "Quantity exceeds stock for productId: {}";
 	public static final String QUANTITY_UPDATED_SUCCESSFULLY = "Quantity updated Successfully";
 	public static final String UPDATE_QUANTITY_ENDED = "updateQuantityIncreaseDecrease method ended for cartItemId: {}";
+	 public static final String CART_ITEM_ADDED_SUCCESSFULLY = "Item added to cart successfully.";
 
 	public static final String CREATE_PRODUCT_STARTED = "createProduct method started for product: {}";
 	public static final String PRODUCT_DETAILS_INVALID = "Product Details cannot be empty";
