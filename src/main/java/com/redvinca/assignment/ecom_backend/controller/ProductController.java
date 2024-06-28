@@ -9,16 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.redvinca.assignment.ecom_backend.constants.Constants;
+import com.redvinca.assignment.ecom_backend.exception.ProductNotFoundException;
 import com.redvinca.assignment.ecom_backend.model.Product;
 import com.redvinca.assignment.ecom_backend.service.IProductService;
 
 @RestController
-@RequestMapping("${product.api.url}") // Base URL from properties file
+@RequestMapping("${product.api.url}")
 public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
@@ -26,17 +28,13 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
-    /**
-     * Creates a new product.
-     * 
-     * @param product the product to be created.
-     * @return the response entity with the created product or an error message.
-     */
     @PostMapping("${product.api.createProduct}")
-    public ResponseEntity<?> createProduct(@RequestBody Product product) {
+    public ResponseEntity<?> createProduct(
+            @RequestPart("product") Product product,
+            @RequestPart("file") MultipartFile file) {
         logger.info(Constants.CONTROLLER_CREATE_PRODUCT_STARTED, product.getName());
         try {
-            Product createdProduct = iProductService.createProduct(product);
+            Product createdProduct = iProductService.createProduct(product, file);
             logger.info(Constants.CONTROLLER_PRODUCT_CREATED_SUCCESSFULLY, createdProduct.getName());
             return ResponseEntity.ok(createdProduct);
         } catch (Exception e) {
@@ -45,11 +43,6 @@ public class ProductController {
         }
     }
 
-    /**
-     * Retrieves all products.
-     * 
-     * @return the response entity with the list of products.
-     */
     @GetMapping("${product.api.getAllProducts}")
     public ResponseEntity<List<Product>> getAllProducts() {
         logger.info(Constants.CONTROLLER_GET_ALL_PRODUCTS_STARTED);
@@ -58,22 +51,16 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    /**
-     * Retrieves a product by its ID.
-     * 
-     * @param id the ID of the product to be retrieved.
-     * @return the response entity with the product or not found status.
-     */
     @GetMapping("${product.api.getProductById}")
     public ResponseEntity<?> getProductById(@PathVariable Long id) {
         logger.info(Constants.CONTROLLER_GET_PRODUCT_BY_ID_STARTED, id);
-        Product product = iProductService.getProductById(id);
-        if (product != null) {
+        try {
+            Product product = iProductService.getProductById(id);
             logger.info(Constants.CONTROLLER_PRODUCT_FOUND, id);
             return ResponseEntity.ok(product);
-        } else {
-            logger.error(Constants.PRODUCT_NOT_FOUND);
-            return ResponseEntity.status(500).body(Constants.PRODUCT_NOT_FOUND);
+        } catch (ProductNotFoundException e) {
+            logger.error(Constants.PRODUCT_NOT_FOUND, e);
+            return ResponseEntity.status(404).body(Constants.PRODUCT_NOT_FOUND);
         }
     }
 }

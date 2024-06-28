@@ -149,7 +149,10 @@ public class CartServiceImpl implements ICartService {
 	@Override
 	public double getTotalPrice() {
 		logger.info(Constants.GET_TOTAL_PRICE_STARTED);
-		double totalPrice = cartRepository.calculateTotalPrice();
+		Double totalPrice = cartRepository.calculateTotalPrice();
+		if(totalPrice==null) {
+			totalPrice = Double.valueOf(0);
+		}
 		logger.info(Constants.GET_TOTAL_PRICE_ENDED, totalPrice);
 		return totalPrice;
 	}
